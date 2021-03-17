@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { v4 as uuid } from "uuid";
-import { getAllItems } from "../slices/itemSlice";
-import { Container, Button } from "reactstrap";
+import { getAllItems, addItem, deleteItem } from "../slices/itemSlice";
+import { Container } from "reactstrap";
 import ShoppingItem from "./ShoppingItem";
+import ShoppingItemModal from "./ShoppingItemModal";
 
 const ShoppingList = () => {
   const [items, setItems] = useState([]);
@@ -16,24 +17,27 @@ const ShoppingList = () => {
     dispatch(getAllItems());
     setItems(itemEntities);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [itemEntities]);
+
+  const handleAddItem = (e, name) => {
+    e.preventDefault();
+
+    dispatch(addItem({ id: uuid(), name }));
+  };
+
+  const handleDeleteItem = (id) => {
+    dispatch(deleteItem(id));
+  };
 
   return (
     <Container>
-      <Button
-        color="dark"
-        className="mb-2"
-        onClick={() => {
-          const name = prompt("Enter Item");
-          if (name) {
-            setItems([...items, { id: uuid(), name }]);
-          }
-        }}
-      >
-        Add Item
-      </Button>
+      <ShoppingItemModal handleAddItem={handleAddItem} />
 
-      <ShoppingItem items={items} setItems={setItems} />
+      <ShoppingItem
+        items={items}
+        setItems={setItems}
+        handleDeleteItem={handleDeleteItem}
+      />
     </Container>
   );
 };
