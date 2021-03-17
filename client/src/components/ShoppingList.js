@@ -1,15 +1,22 @@
-import { useState } from "react";
-import { Container, ListGroup, ListGroupItem, Button } from "reactstrap";
-import { CSSTransition, TransitionGroup } from "react-transition-group";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { v4 as uuid } from "uuid";
+import { getAllItems } from "../slices/itemSlice";
+import { Container, Button } from "reactstrap";
+import ShoppingItem from "./ShoppingItem";
 
 const ShoppingList = () => {
-  const [items, setItems] = useState([
-    { id: uuid(), name: "Coffee" },
-    { id: uuid(), name: "Bra" },
-    { id: uuid(), name: "Book" },
-    { id: uuid(), name: "Shoes" },
-  ]);
+  const [items, setItems] = useState([]);
+
+  const itemEntities = useSelector((state) => state.item.entities);
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getAllItems());
+    setItems(itemEntities);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <Container>
@@ -26,28 +33,7 @@ const ShoppingList = () => {
         Add Item
       </Button>
 
-      <ListGroup>
-        <TransitionGroup className="shopping-list">
-          {items.map((item) => (
-            <CSSTransition key={item.id} timeout={500} classNames="fade">
-              <ListGroupItem>
-                <Button
-                  className="remove-btn mr-2"
-                  color="danger"
-                  size="sm"
-                  onClick={() => {
-                    const newItems = items.filter((i) => i.id !== item.id);
-                    setItems(newItems);
-                  }}
-                >
-                  &times;
-                </Button>
-                {item.name}
-              </ListGroupItem>
-            </CSSTransition>
-          ))}
-        </TransitionGroup>
-      </ListGroup>
+      <ShoppingItem items={items} setItems={setItems} />
     </Container>
   );
 };
