@@ -7,17 +7,9 @@ import ShoppingItem from "./ShoppingItem";
 import ShoppingItemModal from "./ShoppingItemModal";
 
 const ShoppingList = () => {
-  const [items, setItems] = useState([]);
-
-  const itemEntities = useSelector((state) => state.item.entities);
+  const items = useSelector((state) => state.item.entities);
 
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(getAllItems());
-    setItems(itemEntities);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [itemEntities]);
 
   const handleAddItem = (e, name) => {
     e.preventDefault();
@@ -33,11 +25,7 @@ const ShoppingList = () => {
     <Container>
       <ShoppingItemModal handleAddItem={handleAddItem} />
 
-      <ShoppingItem
-        items={items}
-        setItems={setItems}
-        handleDeleteItem={handleDeleteItem}
-      />
+      <ShoppingItem items={items} handleDeleteItem={handleDeleteItem} />
     </Container>
   );
 };

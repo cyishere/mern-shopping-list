@@ -1,7 +1,7 @@
 import { ListGroup, ListGroupItem, Button, Alert, Spinner } from "reactstrap";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 
-const ShoppingItem = ({ items, setItems, handleDeleteItem }) => {
+const ShoppingItem = ({ items, handleDeleteItem }) => {
   if (items.length === 0)
     return (
       <Alert color="light">
