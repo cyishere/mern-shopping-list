@@ -1,7 +1,7 @@
 import { ListGroup, ListGroupItem, Button, Alert, Spinner } from "reactstrap";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 
-const ShoppingItem = ({ items, setItems }) => {
+const ShoppingItem = ({ items, setItems, handleDeleteItem }) => {
   if (items.length === 0)
     return (
       <Alert color="light">
@@ -18,10 +18,7 @@ const ShoppingItem = ({ items, setItems }) => {
                 className="remove-btn mr-2"
                 color="danger"
                 size="sm"
-                onClick={() => {
-                  const newItems = items.filter((i) => i.id !== item.id);
-                  setItems(newItems);
-                }}
+                onClick={() => handleDeleteItem(item.id)}
               >
                 &times;
               </Button>

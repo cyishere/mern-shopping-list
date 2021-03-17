@@ -28,9 +28,17 @@ const itemSlice = createSlice({
     getAllItems: (state, action) => {
       return state;
     },
+    addItem: (state, action) => {
+      state.entities = state.entities.concat(action.payload);
+    },
+    deleteItem: (state, action) => {
+      state.entities = state.entities.filter(
+        (item) => item.id !== action.payload
+      );
+    },
   },
 });
 
-export const { getAllItems } = itemSlice.actions;
+export const { getAllItems, addItem, deleteItem } = itemSlice.actions;
 
 export default itemSlice.reducer;
