@@ -1,6 +1,5 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { v4 as uuid } from "uuid";
 import { Container, Alert, Spinner } from "reactstrap";
 import {
   getAllItems,
@@ -16,6 +15,8 @@ const ShoppingList = () => {
   const fetchStatus = useSelector((state) => state.item.status);
   const error = useSelector((state) => state.item.error);
 
+  const [alertVisible, setAlertVisible] = useState(true);
+
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -23,6 +24,8 @@ const ShoppingList = () => {
       dispatch(getAllItems());
     }
   });
+
+  const onDismiss = () => setAlertVisible(false);
 
   const handleAddItem = (e, name) => {
     e.preventDefault();
@@ -45,7 +48,9 @@ const ShoppingList = () => {
   } else if (error) {
     content = (
       <Container>
-        <Alert color="danger">{error}</Alert>
+        <Alert color="danger" isOpen={alertVisible} toggle={onDismiss}>
+          {error}
+        </Alert>
       </Container>
     );
   } else {

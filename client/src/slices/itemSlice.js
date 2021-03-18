@@ -38,6 +38,19 @@ export const addItem = createAsyncThunk("item/addItem", (itemInfo) => {
     });
 });
 
+// Delete Item
+export const deleteItem = createAsyncThunk("item/deleteItem", (itemId) => {
+  return fetch(`${BACKEND_API}/items/${itemId}`, {
+    method: "DELETE",
+  })
+    .then((response) => response.json())
+    .then((data) => data)
+    .catch((error) => {
+      console.error("Failed in reducer: ", error.message);
+      return error.message;
+    });
+});
+
 /**
  * Main Slice
  */
@@ -78,10 +91,19 @@ const itemSlice = createSlice({
     [addItem.rejected]: (state, action) => {
       state.error = action.payload;
     },
+    [deleteItem.fulfilled]: (state, action) => {
+      if (action.payload.type === "error") {
+        state.error = action.payload.message;
+      } else {
+        const itemId = action.payload.item;
+        state.entities = state.entities.filter((item) => item.id !== itemId);
+      }
+    },
+    [deleteItem.rejected]: (state, action) => {
+      state.error = action.payload;
+    },
   },
 });
-
-export const { deleteItem } = itemSlice.actions;
 
 export default itemSlice.reducer;
 
