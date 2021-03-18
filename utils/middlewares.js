@@ -1,4 +1,15 @@
 /**
+ * Request Logger
+ */
+const requestLogger = (req, res, next) => {
+  console.info("Method:", req.method);
+  console.info("Path:", req.path);
+  console.info("Body:", req.body);
+  console.info("---");
+  next();
+};
+
+/**
  * Error Hanlder
  */
 const errorHandler = (err, req, res, next) => {
@@ -12,4 +23,4 @@ const errorHandler = (err, req, res, next) => {
   next();
 };
 
-module.exports = { errorHandler };
+module.exports = { requestLogger, errorHandler };
