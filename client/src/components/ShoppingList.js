@@ -27,7 +27,7 @@ const ShoppingList = () => {
   const handleAddItem = (e, name) => {
     e.preventDefault();
 
-    dispatch(addItem({ id: uuid(), name }));
+    dispatch(addItem({ name }));
   };
 
   const handleDeleteItem = (id) => {
