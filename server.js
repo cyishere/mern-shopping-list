@@ -1,6 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
-const { errorHandler } = require("./utils/middlewares");
+const cors = require("cors");
+const { errorHandler, requestLogger } = require("./utils/middlewares");
 const itemsRoute = require("./routes/items");
 
 const app = express();
@@ -19,6 +20,8 @@ mongoose
 
 // Middlewares
 app.use(express.json());
+app.use(cors());
+app.use(requestLogger);
 
 // Routes
 app.use("/api/items", itemsRoute);
