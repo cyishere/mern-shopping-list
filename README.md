@@ -8,3 +8,7 @@ And with the **latest versions** of the stack.
 - [x] make register work
 - [x] add authentication & secure routes
 - [x] get userinfo with token
+
+### 9-auth-state
+
+- [ ] initialize auth: check if token in localStorage, if there is then get the user info from server and save it in the state;
