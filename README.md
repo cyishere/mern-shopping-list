@@ -16,6 +16,6 @@ And with the **latest versions** of the stack.
 - make register action work;
 - add Login component;
 - login in backend;
-- [ ] make login action work;
-- [ ] access control;
+- make login action work;
+- access control;
 - logout;
