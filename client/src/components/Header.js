@@ -9,6 +9,7 @@ import {
   NavLink,
 } from "reactstrap";
 import Register from "./Register";
+import Login from "./Login";
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -25,6 +26,9 @@ const Header = () => {
         <Nav className="ml-auto" navbar>
           <NavItem>
             <NavLink href="https://github.com/cyishere">Github</NavLink>
+          </NavItem>
+          <NavItem>
+            <Login />
           </NavItem>
           <NavItem>
             <Register />

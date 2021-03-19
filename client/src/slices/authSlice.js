@@ -43,6 +43,8 @@ export const register = createAsyncThunk("auth/register", (userInfo) => {
     });
 });
 
+export const login = createAsyncThunk("auth/login", (userInfo) => {});
+
 /**
  * Main Slice
  */

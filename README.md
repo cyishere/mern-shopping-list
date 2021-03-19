@@ -16,4 +16,4 @@ And with the **latest versions** of the stack.
 - make register action work;
 - [ ] add Login component;
 - [ ] make login action work;
-- [ ] logout;
+- logout;

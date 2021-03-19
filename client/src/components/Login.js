@@ -4,19 +4,19 @@ import { unwrapResult } from "@reduxjs/toolkit";
 import {
   Alert,
   Button,
+  Form,
+  FormGroup,
+  Input,
+  Label,
   Modal,
   ModalHeader,
   ModalBody,
-  Form,
-  FormGroup,
-  Label,
-  Input,
+  NavLink,
 } from "reactstrap";
-import { register, clearError } from "../slices/authSlice";
+import { login, clearError } from "../slices/authSlice";
 
 const Register = () => {
   const [modal, setModal] = useState(false);
-  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [alertVisible, setAlertVisible] = useState(true);
@@ -33,19 +33,16 @@ const Register = () => {
     e.preventDefault();
 
     try {
-      const result = unwrapResult(
-        await dispatch(register({ name, email, password }))
-      );
+      const result = unwrapResult(await dispatch(login({ email, password })));
 
       if (result.type !== "error") {
         if (error) dispatch(clearError());
         setModal(false);
-        alert("Register successfully!");
+        alert("Login successfully!");
       }
     } catch (error) {
       console.log(error);
     } finally {
-      setName("");
       setEmail("");
       setPassword("");
     }
@@ -53,11 +50,11 @@ const Register = () => {
 
   return (
     <>
-      <Button color="primary" onClick={toggle}>
-        Register
-      </Button>
+      <NavLink href="#" onClick={toggle}>
+        Login
+      </NavLink>
       <Modal isOpen={modal} toggle={toggle}>
-        <ModalHeader toggle={toggle}>Register</ModalHeader>
+        <ModalHeader toggle={toggle}>Login</ModalHeader>
         <ModalBody>
           {error && (
             <Alert color="danger" isOpen={alertVisible} toggle={onDismiss}>
@@ -65,17 +62,6 @@ const Register = () => {
             </Alert>
           )}
           <Form onSubmit={handleOnSubmit}>
-            <FormGroup>
-              <Label for="name">Name</Label>
-              <Input
-                type="text"
-                name="name"
-                id="name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                placeholder="Please write your name here"
-              />
-            </FormGroup>
             <FormGroup>
               <Label for="email">Email</Label>
               <Input
