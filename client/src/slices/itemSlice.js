@@ -22,34 +22,44 @@ export const getAllItems = createAsyncThunk("item/getAllItems", () => {
 });
 
 // Add New Item
-export const addItem = createAsyncThunk("item/addItem", (itemInfo) => {
-  return fetch(`${BACKEND_API}/items`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(itemInfo),
-  })
-    .then((response) => response.json())
-    .then((data) => data)
-    .catch((error) => {
-      console.error("Failed in reducer: ", error.message);
-      return error.message;
-    });
-});
+export const addItem = createAsyncThunk(
+  "item/addItem",
+  ({ itemInfo, token }) => {
+    return fetch(`${BACKEND_API}/items`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      },
+      body: JSON.stringify(itemInfo),
+    })
+      .then((response) => response.json())
+      .then((data) => data)
+      .catch((error) => {
+        console.error("Failed in reducer: ", error.message);
+        return error.message;
+      });
+  }
+);
 
 // Delete Item
-export const deleteItem = createAsyncThunk("item/deleteItem", (itemId) => {
-  return fetch(`${BACKEND_API}/items/${itemId}`, {
-    method: "DELETE",
-  })
-    .then((response) => response.json())
-    .then((data) => data)
-    .catch((error) => {
-      console.error("Failed in reducer: ", error.message);
-      return error.message;
-    });
-});
+export const deleteItem = createAsyncThunk(
+  "item/deleteItem",
+  ({ itemId, token }) => {
+    return fetch(`${BACKEND_API}/items/${itemId}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => data)
+      .catch((error) => {
+        console.error("Failed in reducer: ", error.message);
+        return error.message;
+      });
+  }
+);
 
 /**
  * Main Slice

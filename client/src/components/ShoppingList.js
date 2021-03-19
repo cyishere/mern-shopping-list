@@ -11,6 +11,7 @@ import ShoppingItem from "./ShoppingItem";
 import ShoppingItemModal from "./ShoppingItemModal";
 
 const ShoppingList = () => {
+  const { isAuth, token } = useSelector((state) => state.auth);
   const items = useSelector(selectAllItems);
   const fetchStatus = useSelector((state) => state.item.status);
   const error = useSelector((state) => state.item.error);
@@ -30,11 +31,13 @@ const ShoppingList = () => {
   const handleAddItem = (e, name) => {
     e.preventDefault();
 
-    dispatch(addItem({ name }));
+    const itemInfo = { name };
+
+    dispatch(addItem({ itemInfo, token }));
   };
 
-  const handleDeleteItem = (id) => {
-    dispatch(deleteItem(id));
+  const handleDeleteItem = (itemId) => {
+    dispatch(deleteItem({ itemId, token }));
   };
 
   let content;
