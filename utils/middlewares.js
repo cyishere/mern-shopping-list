@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
 const User = require("../models/user");
 const APP_SECRET = require("../utils/config").APP_SECRET;
+const { unauthorizedError } = require("./helpers");
 
 /**
  * Request Logger
@@ -35,17 +36,13 @@ const auth = async (req, res, next) => {
     const reqHeaderInfo = req.header("Authorization");
 
     if (!reqHeaderInfo) {
-      const error = new Error("No authentication.");
-      error.statusCode = 401;
-      throw error;
+      unauthorizedError("No authentication.");
     }
 
     const token = reqHeaderInfo.split(" ")[1];
 
     if (!token) {
-      const error = new Error("Invalid token.");
-      error.statusCode = 401;
-      throw error;
+      unauthorizedError("Invalid token.");
     }
 
     // Decode token
@@ -55,9 +52,7 @@ const auth = async (req, res, next) => {
     const user = await User.findById(decoded.userId);
 
     if (!user) {
-      const error = new Error("Invalid token.");
-      error.statusCode = 401;
-      throw error;
+      unauthorizedError("Invalid token.");
     }
 
     req.authenticated = true;
