@@ -9,7 +9,7 @@ import {
   Input,
 } from "reactstrap";
 
-const ShoppingItemModal = ({ handleAddItem }) => {
+const ShoppingItemModal = ({ isAuth, handleAddItem }) => {
   const [modal, setModal] = useState(false);
   const [itemName, setItemName] = useState("");
 
@@ -17,9 +17,14 @@ const ShoppingItemModal = ({ handleAddItem }) => {
 
   return (
     <>
-      <Button color="dark" className="mb-2" onClick={toggle}>
-        Add Item
-      </Button>
+      {isAuth ? (
+        <Button color="dark" className="mb-2" onClick={toggle}>
+          Add Item
+        </Button>
+      ) : (
+        <h2 className="mb-4">Please login to manage item.</h2>
+      )}
+
       <Modal isOpen={modal} toggle={toggle}>
         <ModalHeader toggle={toggle}>Add New Item</ModalHeader>
         <ModalBody>

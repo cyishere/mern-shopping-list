@@ -6,6 +6,7 @@ const initialState = {
   status: "idle",
   error: null,
   user: null,
+  isAuth: false,
 };
 
 /**
@@ -43,7 +44,49 @@ export const register = createAsyncThunk("auth/register", (userInfo) => {
     });
 });
 
-export const login = createAsyncThunk("auth/login", (userInfo) => {});
+export const login = createAsyncThunk("auth/login", (userInfo) => {
+  return fetch(`${BACKEND_API}/auth/login`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(userInfo),
+  })
+    .then((response) => response.json())
+    .then((data) => data)
+    .catch((error) => {
+      console.error("Failed in reducer: ", error.message);
+      return error.message;
+    });
+});
+
+/**
+ * Utilities
+ */
+const authFulfilled = (state, action, setLocal) => {
+  if (action.payload.type === "error") {
+    state.status = "failed";
+    state.error = action.payload.message;
+
+    if (!setLocal) {
+      localStorage.removeItem("shopping_token");
+    }
+  } else {
+    state.status = "success";
+    state.token = action.payload.token;
+    state.user = action.payload.user;
+    state.isAuth = true;
+
+    if (setLocal) {
+      localStorage.setItem("shopping_token", action.payload.token);
+    }
+  }
+};
+
+const authRejected = (state, action) => {
+  state.status = "failed";
+  state.error = action.payload;
+};
 
 /**
  * Main Slice
@@ -59,6 +102,8 @@ const authSlice = createSlice({
       state.token = null;
       state.status = "idle";
       state.user = null;
+      state.isAuth = false;
+      localStorage.removeItem("shopping_token");
 
       if (state.error) {
         state.error = null;
@@ -71,37 +116,30 @@ const authSlice = createSlice({
       state.status = "loading";
     },
     [findMe.fulfilled]: (state, action) => {
-      if (action.payload.type === "error") {
-        state.status = "failed";
-        state.error = action.payload.message;
-      } else {
-        state.status = "success";
-        state.token = action.payload.token;
-        state.user = action.payload.user;
-      }
+      authFulfilled(state, action, false);
     },
     [findMe.rejected]: (state, action) => {
-      state.status = "failed";
-      state.error = action.payload;
+      authRejected(state, action);
     },
     // Register
     [register.pending]: (state, action) => {
       state.status = "loading";
     },
     [register.fulfilled]: (state, action) => {
-      if (action.payload.type === "error") {
-        state.status = "failed";
-        state.error = action.payload.message;
-      } else {
-        state.status = "success";
-        state.token = action.payload.token;
-        state.user = action.payload.user;
-        localStorage.setItem("shopping_token", action.payload.token);
-      }
+      authFulfilled(state, action, true);
     },
     [register.rejected]: (state, action) => {
-      state.status = "failed";
-      state.error = action.payload;
+      authRejected(state, action);
+    },
+    // Login
+    [login.pending]: (state, action) => {
+      state.status = "loading";
+    },
+    [login.fulfilled]: (state, action) => {
+      authFulfilled(state, action, true);
+    },
+    [login.rejected]: (state, action) => {
+      authRejected(state, action);
     },
   },
 });
