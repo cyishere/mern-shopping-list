@@ -1,3 +1,7 @@
+const jwt = require("jsonwebtoken");
+const User = require("../models/user");
+const APP_SECRET = require("../utils/config").APP_SECRET;
+
 /**
  * Request Logger
  */
@@ -23,4 +27,46 @@ const errorHandler = (err, req, res, next) => {
   next();
 };
 
-module.exports = { requestLogger, errorHandler };
+/**
+ * Authentication
+ */
+const auth = async (req, res, next) => {
+  try {
+    const reqHeaderInfo = req.header("Authorization");
+
+    if (!reqHeaderInfo) {
+      const error = new Error("No authentication.");
+      error.statusCode = 401;
+      throw error;
+    }
+
+    const token = reqHeaderInfo.split(" ")[1];
+
+    if (!token) {
+      const error = new Error("Invalid token.");
+      error.statusCode = 401;
+      throw error;
+    }
+
+    // Decode token
+    const decoded = jwt.verify(token, APP_SECRET);
+
+    // Verify user
+    const user = await User.findById(decoded.userId);
+
+    if (!user) {
+      const error = new Error("Invalid token.");
+      error.statusCode = 401;
+      throw error;
+    }
+
+    req.authenticated = true;
+    req.userId = decoded.userId;
+
+    next();
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports = { requestLogger, errorHandler, auth };
