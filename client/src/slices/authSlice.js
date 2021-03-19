@@ -6,6 +6,7 @@ const initialState = {
   status: "idle",
   error: null,
   user: null,
+  isAuth: false,
 };
 
 /**
@@ -74,6 +75,7 @@ const authFulfilled = (state, action, setLocal) => {
     state.status = "success";
     state.token = action.payload.token;
     state.user = action.payload.user;
+    state.isAuth = true;
 
     if (setLocal) {
       localStorage.setItem("shopping_token", action.payload.token);
@@ -100,6 +102,8 @@ const authSlice = createSlice({
       state.token = null;
       state.status = "idle";
       state.user = null;
+      state.isAuth = false;
+      localStorage.removeItem("shopping_token");
 
       if (state.error) {
         state.error = null;
@@ -115,8 +119,7 @@ const authSlice = createSlice({
       authFulfilled(state, action, false);
     },
     [findMe.rejected]: (state, action) => {
-      state.status = "failed";
-      state.error = action.payload;
+      authRejected(state, action);
     },
     // Register
     [register.pending]: (state, action) => {
