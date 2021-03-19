@@ -2,7 +2,7 @@ This shopping list project is made of React, Redux, Express & MongoDB.
 
 The project I made by follow along the [Learn the MERN Stack](https://www.youtube.com/playlist?list=PLillGF-RfqbbiTGgA77tGO426V3hRF9iE) tutorial on [Traversy Media Youtube channel](https://www.youtube.com/channel/UC29ju8bIPH5as8OGnQzwJyA), but with the **latest versions** of the stack.
 
-That means my approach is almost different from Traversy's. I learned this tutorial because I wanted to make a solid sense of authentication on both the frontend and backend sides. 💪🏻
+That means my approach is almost different from Traversy's. I learned this tutorial because I wanted to have a solid understanding of authentication on both the frontend and backend sides. 💪🏻
 
 ## Usage
 
