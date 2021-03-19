@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const Item = require("../models/item");
 const { auth } = require("../utils/middlewares");
+const { badRequestError } = require("../utils/helpers");
 
 /**
  * @route   GET /api/items
@@ -24,8 +25,14 @@ router.get("/", async (req, res, next) => {
  */
 router.post("/", auth, async (req, res, next) => {
   try {
+    const { name } = req.body;
+
+    if (!name.trim()) {
+      badRequestError("Name cannot be empty.");
+    }
+
     const newItem = new Item({
-      name: req.body.name,
+      name,
     });
 
     const savedItem = await newItem.save();
@@ -49,9 +56,7 @@ router.delete("/:id", auth, async (req, res, next) => {
     const item = await Item.findByIdAndRemove(req.params.id);
 
     if (!item) {
-      const error = new Error("Item not found.");
-      error.statusCode = 401;
-      throw error;
+      badRequestError("Item not found.");
     }
 
     res.json({ item: item.id, message: "Delete successfuly!" });

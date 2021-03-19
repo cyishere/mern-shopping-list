@@ -4,7 +4,18 @@ And with the **latest versions** of the stack.
 
 ### 8-backend-jwt-auth
 
-- [x] add user model
-- [x] make register work
-- [x] add authentication & secure routes
-- [x] get userinfo with token
+- add user model
+- make register work
+- add authentication & secure routes
+- get userinfo with token
+
+### 9-auth-state
+
+- initialize auth: check if token in localStorage, if there is then get the user info from server and save it in the state;
+- add Register component;
+- make register action work;
+- add Login component;
+- login in backend;
+- [ ] make login action work;
+- [ ] access control;
+- logout;
