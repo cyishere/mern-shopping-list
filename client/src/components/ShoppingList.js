@@ -57,14 +57,20 @@ const ShoppingList = () => {
       </Container>
     );
   } else {
-    content = <ShoppingItemModal handleAddItem={handleAddItem} />;
+    content = (
+      <ShoppingItemModal handleAddItem={handleAddItem} isAuth={isAuth} />
+    );
   }
 
   return (
     <Container>
       {content}
 
-      <ShoppingItem items={items} handleDeleteItem={handleDeleteItem} />
+      <ShoppingItem
+        items={items}
+        handleDeleteItem={handleDeleteItem}
+        isAuth={isAuth}
+      />
     </Container>
   );
 };
