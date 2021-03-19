@@ -14,6 +14,8 @@ And with the **latest versions** of the stack.
 - initialize auth: check if token in localStorage, if there is then get the user info from server and save it in the state;
 - add Register component;
 - make register action work;
-- [ ] add Login component;
+- add Login component;
+- login in backend;
 - [ ] make login action work;
+- [ ] access control;
 - logout;
