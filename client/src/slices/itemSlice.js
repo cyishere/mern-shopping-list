@@ -57,13 +57,7 @@ export const deleteItem = createAsyncThunk("item/deleteItem", (itemId) => {
 const itemSlice = createSlice({
   name: "item",
   initialState,
-  reducers: {
-    deleteItem: (state, action) => {
-      state.entities = state.entities.filter(
-        (item) => item.id !== action.payload
-      );
-    },
-  },
+  reducers: {},
   extraReducers: {
     [getAllItems.pending]: (state, action) => {
       state.status = "loading";
@@ -83,23 +77,32 @@ const itemSlice = createSlice({
     },
     [addItem.fulfilled]: (state, action) => {
       if (action.payload.type === "error") {
+        state.status = "failed";
         state.error = action.payload.message;
       } else {
+        state.status = "success";
         state.entities.push(action.payload.item);
       }
     },
     [addItem.rejected]: (state, action) => {
+      state.status = "failed";
       state.error = action.payload;
+    },
+    [deleteItem.pending]: (state, action) => {
+      state.status = "loading";
     },
     [deleteItem.fulfilled]: (state, action) => {
       if (action.payload.type === "error") {
+        state.status = "failed";
         state.error = action.payload.message;
       } else {
+        state.status = "success";
         const itemId = action.payload.item;
         state.entities = state.entities.filter((item) => item.id !== itemId);
       }
     },
     [deleteItem.rejected]: (state, action) => {
+      state.status = "failed";
       state.error = action.payload;
     },
   },
