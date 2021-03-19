@@ -1,15 +1,14 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
+const { MONGO_URI, PORT } = require("./utils/config");
 const { errorHandler, requestLogger } = require("./utils/middlewares");
 
 const app = express();
 
 // DB Config
-const db = require("./utils/config").MONGO_URI;
-
 mongoose
-  .connect(db, {
+  .connect(MONGO_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useFindAndModify: false,
@@ -34,8 +33,6 @@ app.use("/api/users", usersRoute);
 app.use(errorHandler);
 
 // Start the Server
-const port = require("./utils/config").PORT;
-
-app.listen(port, () => {
-  console.log(`🚀 Server is running on http://localhost:${port}`);
+app.listen(PORT, () => {
+  console.log(`🚀 Server is running on http://localhost:${PORT}`);
 });

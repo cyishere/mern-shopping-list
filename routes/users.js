@@ -2,7 +2,7 @@ const router = require("express").Router();
 const User = require("../models/user");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const config = require("../utils/config");
+const APP_SECRET = require("../utils/config").APP_SECRET;
 
 /**
  * @route   POST /api/users
@@ -40,7 +40,7 @@ router.post("/", async (req, res, next) => {
     const savedUser = await newUser.save();
 
     // Generate Token
-    const token = jwt.sign({ userId: savedUser.id }, config.APP_SECRET, {
+    const token = jwt.sign({ userId: savedUser.id }, APP_SECRET, {
       expiresIn: 3600,
     });
 
