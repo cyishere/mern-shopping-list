@@ -4,6 +4,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const APP_SECRET = require("../utils/config").APP_SECRET;
 const { auth } = require("../utils/middlewares");
+const { badRequestError, unauthorizedError } = require("../utils/helpers");
 
 /**
  * @route   POST /api/auth
@@ -15,17 +16,13 @@ router.post("/", async (req, res, next) => {
     const { name, email, password } = req.body;
 
     if (!name.trim() || !email.trim() || !password.trim()) {
-      const error = new Error("All fields are required.");
-      error.statusCode = 400;
-      throw error;
+      badRequestError("All fields are required.");
     }
 
     const user = await User.findOne({ email });
 
     if (user) {
-      const error = new Error("User already exists.");
-      error.statusCode = 400;
-      throw error;
+      badRequestError("User already exists.");
     }
 
     // Hash password
@@ -50,6 +47,50 @@ router.post("/", async (req, res, next) => {
         id: savedUser.id,
         email: savedUser.email,
         name: savedUser.name,
+      },
+      token,
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
+/**
+ * @route   POST /api/auth/login
+ * @desc    Login
+ * @access  Pulic
+ */
+router.post("/login", async (req, res, next) => {
+  try {
+    const { email, password } = req.body;
+
+    if (!email.trim() || !password.trim()) {
+      badRequestError("All fields are required.");
+    }
+
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      badRequestError("User doesn't exist.");
+    }
+
+    // Check password
+    const passwordValid = bcrypt.compareSync(password, user.password);
+
+    if (!passwordValid) {
+      unauthorizedError("Wrong password.");
+    }
+
+    // Generate Token
+    const token = jwt.sign({ userId: user.id }, APP_SECRET, {
+      expiresIn: 3600,
+    });
+
+    res.json({
+      user: {
+        id: user.id,
+        email: user.email,
+        name: user.name,
       },
       token,
     });
