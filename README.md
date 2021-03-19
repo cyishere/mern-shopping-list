@@ -7,3 +7,4 @@ And with the **latest versions** of the stack.
 - [x] add user model
 - [x] make register work
 - [x] add authentication & secure routes
+- [x] get userinfo with token

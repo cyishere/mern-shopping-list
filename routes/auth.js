@@ -3,9 +3,10 @@ const User = require("../models/user");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const APP_SECRET = require("../utils/config").APP_SECRET;
+const { auth } = require("../utils/middlewares");
 
 /**
- * @route   POST /api/users
+ * @route   POST /api/auth
  * @desc    Register New User
  * @access  Pulic
  */
@@ -51,6 +52,21 @@ router.post("/", async (req, res, next) => {
         token,
       },
     });
+  } catch (error) {
+    next(error);
+  }
+});
+
+/**
+ * @route   POST /api/auth/user
+ * @desc    Get authenticated user info
+ * @access  Private
+ */
+router.get("/user", auth, async (req, res, next) => {
+  try {
+    const user = await User.findById(req.userId).select("-createdAt");
+
+    res.json({ user });
   } catch (error) {
     next(error);
   }

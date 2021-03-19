@@ -20,7 +20,7 @@ router.get("/", async (req, res, next) => {
 /**
  * @route   POST /api/items
  * @desc    Create An Item
- * @access  Pulic
+ * @access  Private
  */
 router.post("/", auth, async (req, res, next) => {
   try {
@@ -42,7 +42,7 @@ router.post("/", auth, async (req, res, next) => {
 /**
  * @route   DELETE /api/items/:id
  * @desc    Delete An Item
- * @access  Pulic
+ * @access  Private
  */
 router.delete("/:id", auth, async (req, res, next) => {
   try {

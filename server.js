@@ -24,10 +24,10 @@ app.use(requestLogger);
 
 // Routes
 const itemsRoute = require("./routes/items");
-const usersRoute = require("./routes/users");
+const authRoute = require("./routes/auth");
 
 app.use("/api/items", itemsRoute);
-app.use("/api/users", usersRoute);
+app.use("/api/auth", authRoute);
 
 // Error Hanlder
 app.use(errorHandler);
