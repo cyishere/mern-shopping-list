@@ -8,6 +8,7 @@ import {
   NavItem,
   NavLink,
 } from "reactstrap";
+import Register from "./Register";
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -24,6 +25,9 @@ const Header = () => {
         <Nav className="ml-auto" navbar>
           <NavItem>
             <NavLink href="https://github.com/cyishere">Github</NavLink>
+          </NavItem>
+          <NavItem>
+            <Register />
           </NavItem>
         </Nav>
       </Collapse>

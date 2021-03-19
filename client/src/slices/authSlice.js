@@ -20,7 +20,23 @@ export const findMe = createAsyncThunk("auth/findMe", (token) => {
     },
   })
     .then((response) => response.json())
-    .then((data) => ({ data, token }))
+    .then((data) => ({ ...data, token }))
+    .catch((error) => {
+      console.error("Failed in reducer: ", error.message);
+      return error.message;
+    });
+});
+
+export const register = createAsyncThunk("auth/register", (userInfo) => {
+  return fetch(`${BACKEND_API}/auth`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(userInfo),
+  })
+    .then((response) => response.json())
+    .then((data) => data)
     .catch((error) => {
       console.error("Failed in reducer: ", error.message);
       return error.message;
@@ -33,8 +49,13 @@ export const findMe = createAsyncThunk("auth/findMe", (token) => {
 const authSlice = createSlice({
   name: "auth",
   initialState,
-  reducers: {},
+  reducers: {
+    clearError: (state, action) => {
+      state.error = null;
+    },
+  },
   extraReducers: {
+    // findMe
     [findMe.pending]: (state, action) => {
       state.status = "loading";
     },
@@ -50,9 +71,30 @@ const authSlice = createSlice({
     },
     [findMe.rejected]: (state, action) => {
       state.status = "failed";
-      state.error = action.payload.message;
+      state.error = action.payload;
+    },
+    // Register
+    [register.pending]: (state, action) => {
+      state.status = "loading";
+    },
+    [register.fulfilled]: (state, action) => {
+      if (action.payload.type === "error") {
+        state.status = "failed";
+        state.error = action.payload.message;
+      } else {
+        state.status = "success";
+        state.token = action.payload.token;
+        state.user = action.payload.user;
+        localStorage.setItem("shopping_token", action.payload.token);
+      }
+    },
+    [register.rejected]: (state, action) => {
+      state.status = "failed";
+      state.error = action.payload;
     },
   },
 });
+
+export const { clearError } = authSlice.actions;
 
 export default authSlice.reducer;

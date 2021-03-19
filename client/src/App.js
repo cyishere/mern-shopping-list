@@ -8,7 +8,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 
 function App() {
-  const token = localStorage.getItem("shoppingList");
+  const token = localStorage.getItem("shopping_token");
 
   useEffect(() => {
     if (token) {

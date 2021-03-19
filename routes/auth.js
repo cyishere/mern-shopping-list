@@ -49,8 +49,9 @@ router.post("/", async (req, res, next) => {
       user: {
         id: savedUser.id,
         email: savedUser.email,
-        token,
+        name: savedUser.name,
       },
+      token,
     });
   } catch (error) {
     next(error);
@@ -58,7 +59,7 @@ router.post("/", async (req, res, next) => {
 });
 
 /**
- * @route   POST /api/auth/user
+ * @route   GET /api/auth/user
  * @desc    Get authenticated user info
  * @access  Private
  */
