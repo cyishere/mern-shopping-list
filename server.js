@@ -2,7 +2,6 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const { errorHandler, requestLogger } = require("./utils/middlewares");
-const itemsRoute = require("./routes/items");
 
 const app = express();
 
@@ -14,6 +13,7 @@ mongoose
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useFindAndModify: false,
+    useCreateIndex: true,
   })
   .then(() => console.log("🍀 MongoDB Connected..."))
   .catch((error) => console.log(error));
@@ -24,7 +24,11 @@ app.use(cors());
 app.use(requestLogger);
 
 // Routes
+const itemsRoute = require("./routes/items");
+const usersRoute = require("./routes/users");
+
 app.use("/api/items", itemsRoute);
+app.use("/api/users", usersRoute);
 
 // Error Hanlder
 app.use(errorHandler);
